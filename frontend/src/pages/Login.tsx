@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 
-function Characters() {
+function Login() {
 
 
     return (
@@ -11,5 +11,5 @@ function Characters() {
     )
   }
   
-  export default Characters;
+  export default Login;
   

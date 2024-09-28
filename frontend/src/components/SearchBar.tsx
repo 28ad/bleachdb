@@ -5,7 +5,7 @@ function SearchBar() {
             <div className="relative">
                 <input
                     placeholder="Search..."
-                    className="input shadow-lg focus:border-2 border-gray-300 px-5 py-[5px] rounded-xl w-56 transition-all duration-300 focus:w-64 focus:border-blue-400 outline-none"
+                    className="input shadow-lg focus:border-2 border-gray-300 px-5 py-[5px] rounded-xl w-44 lg:w-56 transition-all duration-300 focus:w-64 focus:border-blue-400 outline-none"
                     name="search"
                     type="search"
                 />

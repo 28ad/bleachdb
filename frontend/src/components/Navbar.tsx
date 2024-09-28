@@ -68,12 +68,12 @@ function Navbar() {
     return (
 
         <>
-            <nav className="w-full bg-blue-800 h-24 flex justify-center items-center md:justify-between px-4">
+            <nav className="w-full bg-blue-800 h-24 flex justify-center items-center md:justify-between px-4 overflow-y-hidden">
 
                 <div className=''>
 
                     {/* toggle menu icon */}
-                    <div className='absolute left-2 md:hidden'>
+                    <div className='absolute left-2 top-6 md:hidden'>
                         {openMenu ? (
 
                             <>
@@ -139,7 +139,7 @@ function Navbar() {
                         className="relative top-0 w-full py-4 bg-blue-800 flex flex-col justify-center items-center border-t-[1px] border-blue-300">
 
                         {/* search bar */}
-                        <div className='flex md:hiddne md:items-center px-2'>
+                        <div className='flex md:hiddne md:items-center px-2 mb-4'>
                             <SearchBar />
                         </div>
 

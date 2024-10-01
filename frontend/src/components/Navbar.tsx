@@ -68,7 +68,7 @@ function Navbar() {
     return (
 
         <>
-            <nav className="w-full bg-blue-800 h-24 flex justify-center items-center md:justify-between px-4 overflow-y-hidden">
+            <nav className="w-full bg-blue-800 h-24 flex justify-center items-center md:justify-between px-4 overflow-y-hidden shadow-md">
 
                 <div className=''>
 
@@ -112,7 +112,7 @@ function Navbar() {
                     </div>
 
                     {menuLinks.map((link, index) => (
-                        <Link key={index} to={link.path} className='capitalize text-white font-semibold px-2 cursor-pointer text-center'>{link.name}</Link>
+                        <Link key={index} to={link.path} className='capitalize text-white font-semibold px-2 mx-1 cursor-pointer text-center hover:border-b-4 hover:border-red-600 transition-all duration-300 ease-in-out'>{link.name}</Link>
                     ))}
 
                 </div>

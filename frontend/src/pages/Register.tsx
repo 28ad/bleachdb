@@ -1,8 +1,7 @@
 import RegLogNavbar from "../components/RegLogNavbar";
 import FooterComp from "../components/FooterComp";
-
-import Kenpachi from "../assets/images/characters/kenpachi.png";
-import Yamamoto from "../assets/images/characters/yamamoto.png";
+import Logo from "../assets/images/bleachdb-logo.webp";
+import Characters from "../assets/images/characters/registration-img.webp";
 
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
@@ -14,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // @ts-ignore
 import { db, auth } from "../server/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc } from "firebase/firestore";
 
 interface User {
 
@@ -151,12 +150,12 @@ function Register() {
     }
 
     if (!validateEmail(userCredentials.email)) {
-      setStatusMessage({message: 'You must insert a valid email address !', type: 'error'});
+      setStatusMessage({ message: 'You must insert a valid email address !', type: 'error' });
       return false;
     }
 
     if (userCredentials.password !== userCredentials.confirmPassword) {
-      setStatusMessage({message: 'Passwords do not match !', type: 'error'});
+      setStatusMessage({ message: 'Passwords do not match !', type: 'error' });
       return false;
     }
 
@@ -169,34 +168,34 @@ function Register() {
 
     if (!validateForm()) {
       return;
-    } 
+    }
 
     // call function to save user to firebase
     createUserWithEmailAndPassword(auth, userCredentials.email, userCredentials.password)
-  .then(async (userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    console.log(user);
-    
-    // save user data to firestore db
-    try {
-      const docRef = await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        username: userCredentials.username,
-        email: user.email,
-        password: userCredentials.password
+      .then(async (userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        console.log(user);
+
+        // save user data to firestore db
+        try {
+          const docRef = await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            username: userCredentials.username,
+            email: user.email,
+            password: userCredentials.password
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setStatusMessage({ message: errorMessage, type: 'error' });
+        // ..
       });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setStatusMessage({message: errorMessage, type: 'error'});
-    // ..
-  });
     console.log(userCredentials);
   }
 
@@ -205,20 +204,24 @@ function Register() {
 
       <div className="min-h-screen flex flex-col">
 
+        <RegLogNavbar />
+
         {/* Main content */}
 
-        <div className="flex-grow">
+        <div className="flex-grow flex justify-evenly items-start pb-10">
 
-          <RegLogNavbar />
+          {/* characters image + logo */}
+
+          <div className="hidden lg:flex flex-col items-center justify-center w-full pt-10">
+            <img src={Logo} className="w-[400px]" />
+
+            <img src={Characters} className="mt-10 max-h-[356px]"/>
+          </div>
 
           {/* registration form */}
-          <div className="flex flex-col justify-center items-center relative ">
+          <div className="flex flex-col justify-center items-center w-full pt-10">
 
-            {/* character images */}
-            {/* <img src={Yamamoto} className="hidden xl:block absolute xl:w-[350px] 2xl:w-[400px] left-2" />
-            <img src={Kenpachi} className="hidden xl:block absolute xl:w-[300px] 2xl:w-[350px] right-2" /> */}
-
-            <form onSubmit={(e) => preventSubmit(e)} className="w-3/4 md:w-2/4 lg:w-5/12 pb-8 box-content px-8 shadow-md rounded-md bg-gray-50 my-24 border border-blue-400">
+            <form onSubmit={(e) => preventSubmit(e)} className="w-3/4 md:w-2/4 lg:w-7/12 xl:w-9/12 pb-8 box-content px-8 shadow-md rounded-md bg-gray-50">
 
               <div className="flex flex-col items-center justify-between gap-y-10 ">
                 {/* header */}
@@ -227,7 +230,7 @@ function Register() {
                 </div>
 
                 {/* inputs */}
-                <div className="flex flex-col xl:flex-row xl:flex-wrap xl:justify-center gap-x-4 items-center gap-y-4">
+                <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-x-4 items-center gap-y-4">
                   <div className="flex flex-col w-[250px] xl:w-5/12">
                     <label htmlFor="username" className="font-bold">Username:</label>
                     <input
@@ -276,7 +279,7 @@ function Register() {
                     />
                   </div>
 
-                  <div className="flex flex-col items-center xl:items-start w-full relative xl:left-11">
+                  <div className="flex flex-col items-center xl:items-start w-full relative xl:left-[7%]">
                     <button
                       onClick={toggleAvatarPopup}
                       className="bg-blue-800 hover:bg-blue-900 rounded-sm text-white font-bold cursor-pointer h-10 w-[250px] xl:w-[150px]">

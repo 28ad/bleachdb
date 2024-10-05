@@ -44,8 +44,6 @@ function Login() {
     type: ''
   });
 
-  const [loggedInUser, setLoggedInUser] = useState({});
-
   // prevent form from submitting when clicking a button
   const preventSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,16 +131,6 @@ function Login() {
       return false;
     }
 
-    const docRef = doc(db, "users");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
-    }
-
     return true;
 
   }
@@ -160,12 +148,21 @@ function Login() {
         // Signed in 
         const user = userCredential.user;
         console.log(user);
+        window.location.href = "/";
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setStatusMessage(errorMessage);
+
+        console.log(errorCode);
+
+        if (errorCode === "auth/invalid-credential") {
+          setStatusMessage({message: "Invalid credentials ! Your email or password is incorrect.", type: "error"})
+        } else {
+          setStatusMessage({message: errorMessage, type: "error"});
+        }
+        
       });
 
     console.log(userCredentials);

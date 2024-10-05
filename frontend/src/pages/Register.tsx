@@ -12,8 +12,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // @ts-ignore
 import { db, auth } from "../server/firebase";
+
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 interface User {
 
@@ -179,13 +180,13 @@ function Register() {
 
         // save user data to firestore db
         try {
-          const docRef = await addDoc(collection(db, "users"), {
+           await setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             username: userCredentials.username,
             email: user.email,
             password: userCredentials.password
           });
-          console.log("Document written with ID: ", docRef.id);
+          console.log("Document added");
         } catch (e) {
           console.error("Error adding document: ", e);
         }

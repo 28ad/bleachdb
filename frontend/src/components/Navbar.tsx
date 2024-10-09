@@ -180,7 +180,7 @@ function Navbar({ user, isAuth }: DocumentData) {
                         onClick={toggleAccountMenu}
                         className='absolute right-2 flex flex-col items-center justify-center'>
 
-                        <div className='w-10 h-10 rounded-full bg-white cursor-pointer'></div>
+                        <img src={user.avatar_path} className='w-10 h-10 rounded-full cursor-pointer'/>
 
                     </div>}
 
@@ -195,7 +195,7 @@ function Navbar({ user, isAuth }: DocumentData) {
                                 {/* avatar + username */}
                                 <div className='flex jusitfy-center items-center'>
 
-                                    <div className='w-10 h-10 rounded-full bg-gray-200 cursor-pointer'></div>
+                                    <img src={user.avatar_path} className='w-10 h-10 rounded-full  cursor-pointer'/>
                                     <span className='font-semibold pl-2'>{loggedInUser.username}</span>
                                 </div>
                                 {/* email */}

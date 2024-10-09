@@ -2,6 +2,9 @@ import RegLogNavbar from "../components/RegLogNavbar";
 import FooterComp from "../components/FooterComp";
 import Logo from "../assets/images/bleachdb-logo.webp";
 import Characters from "../assets/images/characters/registration-img.webp";
+import Ichigo from "../assets/avatars/ichigo-pfp.webp"
+// @ts-ignore
+import { avatars } from "../data/avatars.js";
 
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
@@ -39,7 +42,7 @@ function Register() {
     confirmPassword: ''
   });
 
-  const [selectedAvatar, setSelectedAvatar] = useState();
+  const [selectedAvatar, setSelectedAvatar] = useState<string>('');
 
   const [statusMessage, setStatusMessage] = useState<Status>({
     message: '',
@@ -136,6 +139,17 @@ function Register() {
 
   }, [statusMessage])
 
+  // set user avatar
+  const selectAvatar = (avatar: any) => {
+
+    setSelectedAvatar(avatar);
+
+  }
+
+  useEffect(() => {
+    console.log(selectedAvatar);
+  }, [selectedAvatar])
+
   const validateEmail = (email: string) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -164,41 +178,43 @@ function Register() {
 
   }
 
-  // add user details to firebase db
-  const registerUser = () => {
+  // register user and send credentials tu firebase db
+const registerUser = () => {
+  // If no avatar is selected, set the default avatar first
+  if (selectedAvatar === '') {
+    setSelectedAvatar(Ichigo);
+  }
 
+  // After setting the avatar, proceed with registration (after a slight delay to ensure state update)
+  setTimeout(() => {
     if (!validateForm()) {
       return;
     }
 
-    // call function to save user to firebase
+    // Now the registration process can proceed with the ensured value of selectedAvatar
     createUserWithEmailAndPassword(auth, userCredentials.email, userCredentials.password)
       .then(async (userCredential) => {
-        // Signed up 
         const user = userCredential.user;
-        console.log(user);
 
-        // save user data to firestore db
         try {
-           await setDoc(doc(db, "users", user.uid), {
+          await setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             username: userCredentials.username,
             email: user.email,
-            password: userCredentials.password
+            password: userCredentials.password,
+            avatar_path: selectedAvatar || Ichigo // Just to ensure we have a value here
           });
-          console.log("Document added");
+          setStatusMessage({ message: 'Registration successful!', type: 'success' });
         } catch (e) {
-          console.error("Error adding document: ", e);
+          setStatusMessage({ message: 'Error adding document: ' + e, type: 'error' });
         }
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setStatusMessage({ message: errorMessage, type: 'error' });
-        // ..
+        setStatusMessage({ message: error.message, type: 'error' });
       });
-    console.log(userCredentials);
-  }
+  }, 0); // Slight delay to allow setState to update before running validateForm and continuing
+};
+
 
   return (
     <>
@@ -289,50 +305,17 @@ function Register() {
 
                     {showAvatarPopup &&
 
-                      <div ref={popupRef} className="absolute xl:left-40 w-80 h-72 bg-gray-200 overflow-y-scroll flex justify-center">
+                      <div ref={popupRef} className="absolute xl:left-40 w-96 h-72 bg-gray-200 overflow-y-scroll flex justify-center">
 
-                        <div className="grid grid-cols-2 gap-10 my-10">
+                        <div className="grid grid-cols-2 gap-y-10 gap-x-10 px-10 my-10">
 
                           {/* each avatar */}
-                          <div className="w-20 h-20 border border-black">
+                          {avatars.map((avatar: any, index: any) => (
 
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
-
-                          <div className="w-20 h-20 border border-black">
-
-                          </div>
+                            <div key={index} onClick={() => {selectAvatar(avatar.path)}}>
+                              <img className="cursor-pointer" src={avatar.path} />
+                            </div>
+                          ))}
 
                         </div>
                       </div>
